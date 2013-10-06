@@ -1,0 +1,45 @@
+;; Processus de veille de la schistosomiase
+;; SCHISTOMPO
+;;--------------------------------------------------
+
+(activity  VeilleSchistosomiase)
+(activity_specialization  VeilleBilharziose VeilleEpidemiologique)
+
+(activity ChangementClimat)
+(activity Pluie)
+(activity Agriculture)
+(activity Peche)
+(activity Irrigation)
+(activity Baignade)
+
+
+(subactivity ChangementClimat EvenementARisque)
+(subactivity Pluie EvenementARisque)
+(subactivity Agriculture EvenementARisque)
+(subactivity Peche EvenementARisque)
+(subactivity Irrigation EvenementARisque)
+(subactivity Baignade EvenementARisque)
+
+;; Est-ce qu'on spécialise la propagation de la bilharziose? ou réutiliser?
+(activity_specialization  VeilleBilharziose PropagationBilharziose)
+
+;; Objets
+(object Parasitologue)
+(object Meteorologiste)
+(object Pedologue)
+
+;; Etats
+--
+(state PointEauSec)
+(state PointEauRempli)
+(state PointEauInfesté)
+(state PointEau)
+
+;; ORDONNANCEMENT DES ACTIVITÉS
+	
+	
+;; PRÉCONDITIONS DE L'OCCURRENCE DES ACTIVITÉS
+
+
+;; EFFETS DE L'OCCURRENCE DES ACTIVITÉS
+

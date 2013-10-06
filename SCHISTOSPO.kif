@@ -1,0 +1,196 @@
+;; Processus de propagation de la schistosomiase
+;; SCHISTOSPO
+;;-----------------------------------------------------------------
+
+;; Processus
+--
+(activity  PropagationBilharziose)
+(activity_specialization  PropagationBilharziose Propagation)
+
+(activity Reproduction)
+
+
+;; Activités liées à l'homme
+--
+(activity ReproductionHomme)
+(activity LiberationOeuf)
+(subactivity LiberationOeuf Contamination)
+
+;; Activités liées au cycle de vie du parasite
+--
+(activity CycleDeVieParasite)
+(subactivity CycleDeVieParasite Infection)
+(activity Eclosion)
+(activity RechercheMollusque)
+(activity PenetrationMollusque)
+(activity Multiplication)
+(activity LiberationSporocyste)
+(activity DeveloppementSporocyste)
+(activity DeveloppementCercaire)
+(activity RechercheHomme)
+(activity PenetrationHomme)
+(activity DeveloppementSchistosomule)
+(activity ReproductionParasite)
+
+(subactivity Eclosion CycleDeVieParasite)
+(subactivity RechercheMollusque CycleDeVieParasite)
+(subactivity PenetrationMollusque CycleDeVieParasite)
+(subactivity Multiplication CycleDeVieParasite)
+(subactivity LiberationSporocyste CycleDeVieParasite)
+(subactivity DeveloppementSporocyste CycleDeVieParasite)
+(subactivity DeveloppementCercaire CycleDeVieParasite)
+(subactivity RechercheHomme CycleDeVieParasite)
+(subactivity PenetrationHomme CycleDeVieParasite)
+(subactivity DeveloppementSchistosomule CycleDeVieParasite)
+(subactivity ReproductionParasite CycleDeVieParasite)
+
+;; Activités liées au cycle de vie du Mollusque
+--
+(activity ReproductionMollusque)
+(activity CycleDeVieMollusque)
+(subactivity CycleDeVieMollusque Infection)
+
+;; Activités à risque
+--
+(activity ChangementClimat)
+(activity Pluie)
+(activity Agriculture)
+(activity Peche)
+(activity Irrigation)
+
+(subactivity ChangementClimat EvenementARisque)
+(subactivity Pluie EvenementARisque)
+(subactivity Agriculture EvenementARisque)
+(subactivity Peche EvenementARisque)
+(subactivity Irrigation EvenementARisque)
+
+;; Processus externes
+--
+(activity VeilleSchistosomiase)
+
+;; Etats Mollusque
+--
+(state Diapause)
+(state Active)
+
+;; Etats Parasite
+--
+(state Oeuf)
+(state Miracidium)
+(state Sporocyste)
+(state Furcocercaire)
+(state Cercaire)
+(state Schistosomule)
+(state Adulte)
+
+;; Etat des individus de la population hôte
+--
+(state Susceptible)
+(state Expose)
+(state Infecte)
+(state Retabli)
+(state Immunisé)
+
+;; Objets
+--
+(object Parasite)
+(object Mollusque)
+(object Hote)
+(object PointEau)
+
+;; ORDONNANCEMENT DES ACTIVITÉS
+
+;; Une occurrence de PropagationBilharziose est possible après une occurrence de Pluie, Agriculture, Changement Climat, Pêche, Irrigation
+
+;; L'Infection implique une pénétration de l'homme par le parasite	
+	
+
+	
+;; PRÉCONDITIONS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; Une occurrence d'Infection est précédée d'une occurrence d'Exposition
+
+;; Une occurrence d'Immunisation est précédée d'une occurrence d'Infection
+
+;; Une occurrence d'Infection est possible que si le Parasite est à l'état Furcocercaire et le Hote à l'état Expose
+
+;; Une occurrence de ReproductionParasite n'est possible que si l'Hote est Infecte et que les parasite sont au stade Adulte
+
+;; Une occurrence de multiplication est précédée d'une occurrence de Penetration Mollusque
+
+;; Une occurrence de DeveloppementCercaire est précédée d'une occurrence de PenetrationHomme
+
+;; EFFETS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; Une occurrence d'Eclosion produit un état Miracidium
+
+;; Une occurrence d'Eclosion produit un état Miracidium
+
+
+;; La contamination est suivie de l'infection. L'infection ici correspond aussi au processus de la réaction pathologique.
+(forall (?occContam)
+	(implies (and (occurrence_of ?occContam Contamination)
+				  (legal ?occContam))
+	(legal (successor Infection ?occContam))))
+
+;; La contamination implique une pénétration de l'homme par le parasite	
+	
+;; la succession entre les autres phases n'est pas systématique et dépend d'une certaine probailité même si toutes les préconditions sont réunies
+;; En fait, l'idée pourrait être de mettre un peu de probalité dans les préconditions 
+	
+(forall (?occContam)
+	(implies (and (occurrence_of ?occContam Contamination)
+				  (legal ?occContam))
+	(legal (successor DeveloppementCercaire ?occContam))))
+	
+(forall (?occDevCercaire)
+	(implies (and (occurrence_of ?occDevCercaire DeveloppementCercaire)
+				  (legal ?occDevCercaire))
+	(legal (successor DeveloppementSchistosomule ?occDevCercaire))))
+	
+(forall (?occDevSchisto)
+	(implies (and (occurrence_of ?occDevSchisto DeveloppementSchistosomule)
+				  (legal ?occDevSchisto))
+	(legal (successor Reproduction ?occDevSchisto))))
+
+(forall (?occReprod)
+	(implies (and (occurrence_of ?occReprod Reproduction)
+				  (legal ?occReprod))
+	(legal (successor LiberationOeuf ?occReprod))))
+	
+(forall (?occLibOeuf)
+	(implies (and (occurrence_of ?occLibOeuf LiberationOeuf)
+				  (legal ?occLibOeuf))
+	(legal (successor Eclosion ?occLibOeuf))))
+	
+(forall (?occEclosion)
+	(implies (and (occurrence_of ?occEclosion Eclosion)
+				  (legal ?occEclosion))
+	(legal (successor PenetrationMollusque ?occEclosion))))
+	
+(forall (?occPenetMol)
+	(implies (and (occurrence_of ?occPenetMol PenetrationMollusque)
+				  (legal ?occPenetMol))
+	(legal (successor Multiplication ?occPenetMol))))
+	
+(forall (?occMulti)
+	(implies (and (occurrence_of ?occMulti Multiplication)
+				  (legal ?occMulti)))
+	(legal (successor LiberationSporocyste ?occMulti)))
+
+(forall (?occLibSporo)
+	(implies (and (occurrence_of ?occLibSporo LiberationSporocyste)
+				  (legal ?occLibSporo))
+	(legal (successor DeveloppementSporocyste ?occLibSporo))))
+
+(forall (?occDevelop)
+	(implies (and (occurrence_of ?occDevelop DeveloppementSporocyste)
+				  (legal ?occDevelop))
+	(legal (successor RechercheHomme ?occDevelop))))
+	
+(forall (?occRechercheH)
+	(implies (and (occurrence_of ?occRechercheH RechercheHomme)
+				  (legal ?occRechercheH))
+	(legal (successor Contamination ?occRechercheH))))
+	
+

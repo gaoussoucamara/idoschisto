@@ -1,0 +1,163 @@
+;; Patron du processus de veille épidémiologique des maladies infectieuses
+;; IDMPO-Core
+;;--------------------------------------------------
+
+(activity Veille)
+(activity  VeilleEpidemiologique)
+(activity_specialization  VeilleEpidemiologique Veille)
+
+(activity PhenomeneEpidemiologique)
+
+(activity Surveillance)
+(subactivity Surveillance Veille)
+(activity Detection)
+(activity Collecte)
+(subactivity Detection Surveillance)
+(subactivity Collecte Surveillance)
+
+(activity Analyse)
+(subactivity Analyse Veille)
+(activity Simulation)
+(activity Interpretation)
+(activity Alerte)
+(subactivity Simulation Analyse)
+(subactivity Interpretation Analyse)
+(subactivity Alerte Analyse)
+
+(activity Decision)
+(subactivity Decision Veille)
+(activity ElaborationPlanAction)
+(activity EvaluationPlanAction)
+(activity SelectionPlanAction)
+(activity ApplicationPlanAction)
+(subactivity ElaborationPlanAction Decision)
+(subactivity EvaluationPlanAction Decision)
+(subactivity SelectionPlanAction Decision)
+(subactivity ApplicationPlanAction Decision)
+
+(activity Evaluation)
+(subactivity Evaluation Veille)
+(activity DefinitionStrategieEvaluation)
+(activity ApplicationEvaluation)
+(subactivity DefinitionStrategieEvaluation Evaluation)
+(subactivity ApplicationEvaluation Evaluation)
+
+
+;; Objets
+(object Capteur)
+(object ActeurDeVeille)
+(object Organisme)
+(object Epidemiologiste)
+(object Medecin)
+(object Biologiste)
+(object Biostatisticien)
+(object AgentSantePublic)
+(object ActeurPolitique)
+(object Donnee)
+(object SourceDonnee)
+(object ModeleSimulation)
+(object Simulateur)
+(object Requete)
+(object Resultat)
+
+;; Etats
+(state Instable)
+(state Stable)
+
+
+;; ORDONNANCEMENT DES ACTIVITÉS
+
+;; La detection est suivie d'une collecte de données
+(forall (?occDetect)
+	(implies (and (occurrence_of ?occDetect Detection)
+				  (legal ?occDetect))
+	(legal (successor Collecte ?occDetect))))
+
+;; La collecte de données est suivie de l'analyse de l'impact, de l'événement qui a produit ces données, sur l'état du système dans le futur	
+(forall (?occCollect)
+	(implies (and (occurrence_of ?occCollect Collecte)
+				  (legal ?occCollect))
+	(legal (successor Analyse ?occCollect))))
+
+;; L'analyse n'est pas forcément suivie de la décision	
+	
+;; S'il y a alerte, elle est suivie de décision	
+(forall (?occAlert)
+	(implies (and (occurrence_of ?occAlert Alert)
+				  (legal ?occAlert))
+	(legal (successor Decision ?occAlert))))
+
+;; Les décision sont suivies d'une évaluation quelque temps plus tard	
+(forall (?occDecision)
+	(implies (and (occurrence_of ?occDecision Decision)
+				  (legal ?occDecision))
+	(legal (successor Evaluation ?occDecision))))
+
+;;  --- 
+
+;; La Detection est suivie d'une Collecte de données
+
+
+;; La Collecte de données est suivie de l'Analyse 	
+
+
+;; Le Traitement est le début de l'Analyse
+
+
+;; S'il y a Alerte, elle est suivie de décision	
+
+
+;; La Décision suit l'Analyse que lorsqu'il y a Alerte d'un Risque dans le futur
+
+
+;; La Décision est suivie d'une Evaluation
+
+
+;; L'Evaluation peut être suivie d'une Décision
+
+	
+;; PRÉCONDITIONS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; La Detection se produit qu'au changement d'état d'un facteur de risque
+
+
+;; La Collecte se produit à la suite de l'occurrence de la Detection d'un changement au niveau des facteurs de risque. Il peut aussi se produire à tout autre moment
+
+
+;; L'Analyse ne peut se produire qu'après l'occurrence d'une Collecte
+
+
+;; L'Interprétation peut se produire en même temps ou après l'occurrence d'un Traitement
+
+
+;; L'Alerte ne peut se produire qu'après l'occurrence d'une Interprétation
+
+
+;; La Décision ne peut se produire qu'après l'occurrence d'une Alerte ou l'occurrence d'une Evaluation
+
+
+;; L'Evaluation des plans d'action peut se produire en même temps ou après l'occurrence de l'Elaboration des plans d'action
+
+
+;; La Sélection d'un plan d'action ne peut se produire qu'après l'occurrence de l'Evaluation des plans d'action
+
+
+;; La Mise en oeuvre du plan d'action ne peut se produire qu'après l'occurrence de la Sélection d'un plan d'action
+
+
+;; L'Evaluation peut se produire en même temps ou après l'occurrence de la Décision
+
+
+;; EFFETS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; Une occurrence de Collecte entraine une occurrence d'Analyse
+
+
+;; Une occurrence de Traitement entraine une occurrence d'Interprétation
+
+
+;; Une occurrence de Décision entraine une occurrence d'Evaluation
+
+
+;; Une occurrence d'Evaluation des plans d'action entraine une occurrence de Sélection d'un plan d'action
+

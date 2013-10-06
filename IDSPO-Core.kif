@@ -1,0 +1,98 @@
+;; Patron du processus de propagation des maladies infectieuses
+;; IDSPO-Core
+;;-----------------------------------------------------------------
+
+;; Processus
+--
+(activity Propagation)
+
+(activity Transmission)
+(activity Exposition)
+(activity Contamination)
+(activity Infection)
+(activity Traitement)
+(activity PerteImmunite)
+
+(subactivity Exposition Transmission)
+(subactivity Contamination Transmission)
+(subactivity LiberationOeuf Transmission)
+(subactivity CycleDeViePathogene Transmission)
+
+(activity Infection)
+(subactivity Infection Propagation)
+(activity Therapie)
+(subactivity Therapie Propagation)
+(activity Retablissement)
+(subactivity Retablissement Propagation)
+(activity Immunisation)
+(subactivity Immunisation Propagation)
+(activity PerteImmunite)
+(subactivity PerteImmunite Propagation)
+(activity Exposition)
+(subactivity Exposition Propagation)
+
+(activity EvenementARisque)
+(activity VeilleEpidemiologique)
+
+;; Objets
+--
+(object Hote)
+(object PopulationHote)
+(object AgentPathogene)
+(object PopulationAgentPathogene)
+(Objet Reservoir)
+
+;; Etats
+--
+(state Susceptible)
+(state Expose)
+(state Infecte)
+(state Retabli)
+(state Immunise)
+(state EtatARisque)
+
+;; ORDONNANCEMENT DES ACTIVITÉS
+
+;; L'Infection et la Thérapie peuvent se produire en même temps
+
+;; L'Infection et le Rétablissement peuvent se produire en même temps
+
+;; Une occurrence de Retablissement est possible après une occurrence d'Infection
+
+;; Une occurrence d'Immunisation est possible après une occurrence de Retablissement
+
+;; Une occurrence de PerteImmunité est possible après une occurrence d'Immunisation
+
+;; Une occurrence de Infection est possible après une occurrence d'Exposition
+
+;; Une occurrence de Propagation est possible après une occurrence d'EvenementARisque
+
+;; Une occurrence de VeilleEpidemiologique est possible après une occurrence de Propagation
+
+;; Une occurrence de VeilleEpidemiologique est possible après une occurrence d'EvenementARisque
+
+;; une occurrence d'Infection est possible après une occurrence de PerteImmunite
+
+
+;; PRÉCONDITIONS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; L'Immunisation se produit après l'occurrence de Rétablissement
+
+;; Une occurrence de Thérapie est toujours précédée d'une occurrence d'Infection
+
+;; Une occurrence de Retablissement est toujours précédée d'une occurrence d'Infection
+
+;; Une occurrence de PerteImmunite est toujours précédée d'une occurrence d'Immunisation
+
+
+;; EFFETS DE L'OCCURRENCE DES ACTIVITÉS
+
+;; Une occurrence de Exposition produit un état Expose
+
+;; Une occurrence d'Infection produit un état Infecte
+
+;; Une occurrence de Retablissement produit un état Retabli
+
+;; Une occurrence d'Immunisation produit un état Immunise
+
+;; Une occurrence de PerteImmunite produit un état Susceptible
