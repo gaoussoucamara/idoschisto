@@ -3,7 +3,9 @@
 ;;--------------------------------------------------
 
 (activity  VeilleSchistosomiase)
-(activity_specialization  VeilleBilharziose VeilleEpidemiologique)
+(activity_specialization  VeilleSchistosomiase VeilleEpidemiologique)
+
+(activity  Propagationschistosomiase)
 
 (activity ChangementClimat)
 (activity Pluie)
@@ -19,9 +21,6 @@
 (subactivity Peche EvenementARisque)
 (subactivity Irrigation EvenementARisque)
 (subactivity Baignade EvenementARisque)
-
-;; Est-ce qu'on spécialise la propagation de la bilharziose? ou réutiliser?
-(activity_specialization  VeilleBilharziose PropagationBilharziose)
 
 ;; Objets
 (object Parasitologue)

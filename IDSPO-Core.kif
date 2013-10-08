@@ -2,34 +2,43 @@
 ;; IDSPO-Core
 ;;-----------------------------------------------------------------
 
-;; Processus
---
+;; Processus 
+-- 
 (activity Propagation)
-
-(activity Transmission)
-(activity Exposition)
 (activity Contamination)
+(activity Transmission)
+
+(activity Exposition)
 (activity Infection)
 (activity Traitement)
-(activity PerteImmunite)
-
-(subactivity Exposition Transmission)
-(subactivity Contamination Transmission)
-(subactivity LiberationOeuf Transmission)
-(subactivity CycleDeViePathogene Transmission)
-
-(activity Infection)
-(subactivity Infection Propagation)
-(activity Therapie)
-(subactivity Therapie Propagation)
 (activity Retablissement)
-(subactivity Retablissement Propagation)
 (activity Immunisation)
-(subactivity Immunisation Propagation)
 (activity PerteImmunite)
-(subactivity PerteImmunite Propagation)
-(activity Exposition)
+
+(subactivity Transmission Propagation)
 (subactivity Exposition Propagation)
+(subactivity Contamination Transmission)
+(subactivity Contamination Propagation)
+(subactivity Infection Propagation)
+(subactivity Traitement Propagation)
+(subactivity Retablissement Propagation)
+(subactivity Immunisation Propagation)
+(subactivity PerteImmunite Propagation)
+
+(activity CycleDeVieHote)
+(activity EvolutionEtatSanteHote)
+(activity CycleDeViePathogene)
+(subactivity EvolutionEtatSanteHote Propagation)
+(subactivity CycleDeViePathogene Propagation)
+
+(activity Naissance)
+(activity Mort)
+(activity DynamiquePopulation)
+(activity DynamiquePopulationHote)
+(activity DynamiquePopulationPathogene)
+(activity ReproductionEspece)
+(activity ReproductionHote)
+(activity ReproductionPathogene)
 
 (activity EvenementARisque)
 (activity VeilleEpidemiologique)
@@ -40,7 +49,8 @@
 (object PopulationHote)
 (object AgentPathogene)
 (object PopulationAgentPathogene)
-(Objet Reservoir)
+(Objet ReservoirPathogene)
+(Objet VecteurTransmission)
 
 ;; Etats
 --
@@ -49,6 +59,7 @@
 (state Infecte)
 (state Retabli)
 (state Immunise)
+(state EtatSanteHote)
 (state EtatARisque)
 
 ;; ORDONNANCEMENT DES ACTIVITÉS
