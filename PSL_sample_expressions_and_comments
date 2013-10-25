@@ -1,0 +1,135 @@
+(activity SuivPreced)
+(activity Suivant)
+(activity Precedent)
+(subactivity Suivant SuivPreced)
+(subactivity Precedent SuivPreced)
+
+(state OK)
+(state NotOK)
+
+;; Ordonnancement des activités (legal & poss)
+
+(activity Suivant)
+(activity Precedent)
+
+;; == PSL : Process Specification Language ==
+
+;; Ce fichier contient uniquement les déclarations des processus (modélisés comme des activités), des objets et états
+;; Malheureusement PSL est conçu pour les processus de manifacture, d'ingénierie et d'entreprise. Son utilisation pour la modélisation des processus de la propagation d'une maladie n'est pas convenable. Néamoins nous montrons ici quelques expressions en guise d'illustration.
+
+;; == COMMENTAIRES SUR LES PRIMITIVES UTILISEES ==
+
+;;   LEGAL spécifie qu'une occurrence d'une certaine activité est autorisée dans la spécification d'une comportement
+
+;;   (POSS ?a ?occ) spécifie qu'une occurrence d'une activité ?a est possible après l'occurrence ?occ d'une certaine activité
+
+;;   SUCCESSOR
+;; Toute occurrence de Precedent doit être suivie d'une occurrence de Suivant, mais ne dit pas si Suivant est le seul successeur possible, on peut l'exprimer autrement en rajoutant d'autre contraintes. Par exemple, toute autre occurrence qui n'est pas Suivant n'est pas LEGAL.
+;; (SUCCESSEUR ?Suiv ?Preced) est une fonction qui renvoie VRAI si ?Suive est l'occurrence qui suit l'occurrence ?Preced.
+
+(forall (?occPreced)
+	(implies (and (occurrence_of ?occPreced Precedent)
+				  (legal ?occDetect))
+	(legal (successor Suivant ?occPreced))))
+
+
+;;   NEXT_SUBOCC
+;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Il n'autorise l'occurrence d'aucune autre activité entre deux activités qu'elle relie dans une activité complexe. NEXT_SUBOCC permet d'exprimer plus de contrainte dans la spécialisation ou la réutilisation d'un patron.
+
+(forall (?occSuivPreced)
+	(implies
+		(occurrence_of ?occSuivPreced SuivPreced)
+		(exists (?occPreced ?occSuiv)
+				(and (occurrence_of ?occPreced Paint)
+				(occurrence_of ?occSuiv Dry)
+				(subactivity_occurrence ?occPreced ?occSuivPreced)
+				(subactivity_occurrence ?occSuiv ?occSuivPreced)
+				(next_subocc ?occPreced ?occSuiv SuivPreced)))))
+
+;;   MIN_PRECEDES
+;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Contrairement à NEXT_SUBOCC, il autorise l'occurrence d'une autre activité entre deux activités qu'elle relie dans une activité complexe. MIN_PRECEDES laisse plus de possibilité à une redéfinition des activités dans le cadre d'une spécialisation ou d'une réutilisation d'un patron.
+
+(forall (?occSuivPreced)
+	(implies
+		(occurrence_of ?occSuivPreced SuivPreced)
+		(exists (?occPreced ?occSuiv)
+				(and (occurrence_of ?occPreced Paint)
+				(occurrence_of ?occSuiv Dry)
+				(subactivity_occurrence ?occPreced ?occSuivPreced)
+				(subactivity_occurrence ?occSuiv ?occSuivPreced)
+				(min_precedes ?occPreced ?occSuiv SuivPreced)))))
+
+;; ROOT_OCC et LEAF_OCC permettent respectivement de spécifier les activités de début et de fin d'une activité complexe.
+
+;; Les realations NEXT_SUBBOCC, MIN_PRECEDES, ROOT_OCC et LEAF_OCC s'appliquent aux occurrences d'activité d'une activité complexe. Leurs utilisations	supposent que les activités mises en relation sont primitive. Il existe une alternative si on ne veut pas spécifier la nature (primitive ou complexe) de la sous-activité : 
+
+(forall (?occSuivPreced)
+	(implies
+	(occurrence_of ?occSuivPreced SuivPreced)
+	(exists (?occPreced ?occSuiv
+			?rootPreced ?leafPreced
+			?rootSuiv ?leafSuiv)
+			(and (occurrence_of ?occPreced Paint)
+				(occurrence_of ?occSuiv Dry)
+				(subactivity_occurrence ?occPreced ?occSuivPreced)
+				(subactivity_occurrence ?occSuiv ?occSuivPreced)
+				(root_occ ?rootPreced ?occPreced)
+				(leaf_occ ?leafPreced ?occPreced)
+				(root_occ ?rootSuiv ?occSuiv)
+				(leaf_occ ?leafSuiv ?occSuiv)
+				(root_occ ?rootPreced ?occSuivPreced)
+				(next_subocc ?leafPreced ?rootSuiv SuivPreced)
+				(leaf_occ ?leafSuiv ?occSuivPreced)))))
+				
+;; Cette alternative pourrait être utilisée pour Traitement (Analyse) et Contamination par exemple dans les patrons
+				
+;; Préconditions de l'occurrence des activités
+
+;;   PRIOR
+
+;; Effets de l'occurrence des activités
+
+;;   HOLDS
+
+(forall (?occCont)
+	(implies	(occurrence_of ?occContam Contamination)
+				(and (prior Sain ?occContam)
+					 (holds Infecte ?occContam))))
+
+;; Prédiction ... 
+					 
+(forall (?occContam)
+	(implies	(and (occurrence_of ?occContam Contamination)
+					 (prior Sain ?occContam)
+					 (holds Infecte ?occContam))
+				(exists (?occInfect) 
+						(and (occurrence_of ?occInfect Infection)
+							 (= (endof(?occContam) beginof(?occInfect)))
+						)
+				)
+	)
+)
+
+;; Explication ... 
+
+(forall (?occInfect)
+	(implies (and (occurrence_of ?occInfect Infection)
+				  (subactivity_occurrence ?occInfect ?occPropag)
+			 )
+			 (exists (?occContam) 
+					 (and (occurrence_of ?occContam Contamination)
+						  (subactivity_occurrence ?occContam ?occPropag)
+						  (prior Sain ?occContam)
+						  (holds Infecte ?occContam)
+						  (ealier ?occContam ?occInfect))
+			 )
+	)
+)
+
+(forall (?occSurveil)
+	(implies (and (occurrence_of ?occSurveil Surveillance)
+				  (subactivity_occurrence ?occSurveil ?occVeilleEpi))
+			 (exists (?occAnalyse)
+					 (and (occurrence_of ?occAnalyse Analyse)
+						  (subactivity_occurrence ?occAnalyse ?occVeilleEpi)
+						  (ealier ?occSurveil ?occAnalyse)))))	

@@ -2,6 +2,11 @@
 ;; SCHISTOSPO
 ;;-----------------------------------------------------------------
 
+;; == PSL : Process Specification Language ==
+
+;; Ce fichier contient uniquement les déclarations des processus (modélisés comme des activités), des objets et états
+;; Malheureusement PSL est conçu pour les processus de manifacture, d'ingénierie et d'entreprise. Son utilisation pour la modélisation des processus de la propagation d'une maladie n'est pas convenable. Néamoins nous montrons ici quelques expressions en guise d'illustration.
+
 ;; Processus
 --
 (activity  Propagationschistosomiase)

@@ -2,6 +2,15 @@
 ;; SCHISTOMPO
 ;;--------------------------------------------------
 
+;; == PSL : Process Specification Language ==
+
+;; Ce fichier contient uniquement les déclarations des processus (modélisés comme des activités), des objets et états
+;; Malheureusement PSL est conçu pour les processus de manifacture, d'ingénierie et d'entreprise. 
+;; Il conviendrait aussi à la modélisation des activités de la veille épidémiologique qui sont presque de même nature
+;; Nous montrons ici quelques expressions en guise d'illustration car la mise en oeuvre du modèle de processus nous pose encore des problèmes en raison d'un manque d'outils qui lui sont associés.
+
+;; Processus
+
 (activity  VeilleSchistosomiase)
 (activity_specialization  VeilleSchistosomiase VeilleEpidemiologique)
 

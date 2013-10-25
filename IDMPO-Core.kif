@@ -2,6 +2,15 @@
 ;; IDMPO-Core
 ;;--------------------------------------------------
 
+;; == PSL : Process Specification Language ==
+
+;; Ce fichier contient uniquement les déclarations des processus (modélisés comme des activités), des objets et états
+;; Malheureusement PSL est conçu pour les processus de manifacture, d'ingénierie et d'entreprise. 
+;; Il conviendrait aussi à la modélisation des activités de la veille épidémiologique qui sont presque de même nature
+;; Nous montrons ici quelques expressions en guise d'illustration car la mise en oeuvre du modèle de processus nous pose encore des problèmes en raison d'un manque d'outils qui lui sont associés.
+
+;; Processus
+
 (activity Veille)
 (activity  VeilleEpidemiologique)
 (activity_specialization  VeilleEpidemiologique Veille)
@@ -67,18 +76,18 @@
 
 ;; ORDONNANCEMENT DES ACTIVITÉS
 
-;; La detection est suivie d'une collecte de données
-(forall (?occDetect)
-	(implies (and (occurrence_of ?occDetect Detection)
-				  (legal ?occDetect))
-	(legal (successor Collecte ?occDetect))))
+;; Ordonnancement des activités principales de la veille : Surveillance, Analyse, Décision et Evaluation
 
-;; La collecte de données est suivie de l'analyse de l'impact, de l'événement qui a produit ces données, sur l'état du système dans le futur	
+occurrence_of ?occVeilleEpi VeilleEpidemiologique
+
+;; La surveillance est suivie de l'analyse 	
 (forall (?occCollect)
 	(implies (and (occurrence_of ?occCollect Collecte)
 				  (legal ?occCollect))
 	(legal (successor Analyse ?occCollect))))
 
+
+	
 ;; L'analyse n'est pas forcément suivie de la décision	
 	
 ;; S'il y a alerte, elle est suivie de décision	
@@ -87,7 +96,7 @@
 				  (legal ?occAlert))
 	(legal (successor Decision ?occAlert))))
 
-;; Les décision sont suivies d'une évaluation quelque temps plus tard	
+;; Les décisions sont suivies d'une évaluation quelque temps plus tard	
 (forall (?occDecision)
 	(implies (and (occurrence_of ?occDecision Decision)
 				  (legal ?occDecision))
@@ -96,6 +105,10 @@
 ;;  --- 
 
 ;; La Detection est suivie d'une Collecte de données
+(forall (?occDetect)
+	(implies (and (occurrence_of ?occDetect Detection)
+				  (legal ?occDetect))
+	(legal (successor Collecte ?occDetect))))
 
 
 ;; La Collecte de données est suivie de l'Analyse 	
