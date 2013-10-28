@@ -13,7 +13,7 @@
 
 (activity Veille)
 (activity  VeilleEpidemiologique)
-(activity_specialization  VeilleEpidemiologique Veille)
+(activity-specialization  VeilleEpidemiologique Veille)
 
 (activity PhenomeneEpidemiologique)
 
@@ -78,37 +78,101 @@
 
 ;; Ordonnancement des activités principales de la veille : Surveillance, Analyse, Décision et Evaluation
 
-occurrence_of ?occVeilleEpi VeilleEpidemiologique
+;; SUBACTIVITY-PRECEDES
+;; La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Contrairement à NEXT-ACTIVITY, il autorise l'occurrence d'une autre activité entre deux activités qu'elle relie dans une activité complexe. SUBACTIVITY-PRECEDES laisse plus de possibilité à une redéfinition des activités dans le cadre d'une spécialisation ou d'une réutilisation d'un patron.
 
-;; La surveillance est suivie de l'analyse 	
-(forall (?occCollect)
-	(implies (and (occurrence_of ?occCollect Collecte)
-				  (legal ?occCollect))
-	(legal (successor Analyse ?occCollect))))
+(forall (?occVeilleEpi)
+	(implies
+		(occurrence-of ?occVeilleEpi VeilleEpidemiologique)
+		(exists (?occSurveil ?occAnalyse ?occDecision ?occEval)
+				(and (occurrence-of ?occSurveil Surveillance)
+					(occurrence-of ?occAnalyse Analyse)
+					(occurrence-of ?occDecision Decision)
+					(occurrence-of ?occEval Evaluation)
+					(subactivity-occurrence ?occSurveil ?occVeilleEpi)
+					(subactivity-occurrence ?occAnalyse ?occVeilleEpi)
+					(subactivity-occurrence ?occDecision ?occVeilleEpi)
+					(subactivity-occurrence ?occEval ?occVeilleEpi)
+					(subactivity-precedes ?occSurveil ?occAnalyse ?occVeilleEpi)
+					(subactivity-precedes ?occAnalyse ?occDecision ?occVeilleEpi)
+					(subactivity-precedes ?occDecision ?occEval ?occVeilleEpi)				
+				)
+		)
+	)
+)
 
+;; Ordonnancement des activités de la surveillance : Detection et Collecte
 
-	
-;; L'analyse n'est pas forcément suivie de la décision	
-	
-;; S'il y a alerte, elle est suivie de décision	
-(forall (?occAlert)
-	(implies (and (occurrence_of ?occAlert Alert)
-				  (legal ?occAlert))
-	(legal (successor Decision ?occAlert))))
+(forall (?occSurveil)
+	(implies
+		(occurrence-of ?occSurveil Surveillance)
+		(exists (?occDetection ?occCollecte)
+				(and (occurrence-of ?occDetection Detection)
+					(occurrence-of ?occCollecte Collection)
+					(subactivity-occurrence ?occDetection ?occSurveil)
+					(subactivity-occurrence ?occCollecte ?occSurveil)
+					(subactivity-precedes ?occDetection ?occCollecte ?occSurveil)				
+				)
+		)
+	)
+)
 
-;; Les décisions sont suivies d'une évaluation quelque temps plus tard	
+;; Ordonnancement des activités de l'analyse : Simulation, Interpretation et Alerte
+
+(forall (?occAnalyse)
+	(implies
+		(occurrence-of ?occAnalyse Analyse)
+		(exists (?occSim ?occInter ?occAlerte)
+				(and (occurrence-of ?occSim Simulation)
+					(occurrence-of ?occInter Interpretation)
+					(occurrence-of ?occAlerte Alerte)
+					(subactivity-occurrence ?occSim ?occAnalyse)
+					(subactivity-occurrence ?occInter ?occAnalyse)
+					(subactivity-occurrence ?occAlerte ?occAnalyse)
+					(subactivity-precedes ?occSim ?occInter ?occAnalyse)
+					(subactivity-precedes ?occInter ?occAlerte ?occAnalyse)
+				)
+		)
+	)
+)
+
+;; Ordonnancement des activités de la decision : ElaborationPlanAction, EvaluationPlanAction, SelectionPlanAction et ApplicationPlanAction
+
 (forall (?occDecision)
-	(implies (and (occurrence_of ?occDecision Decision)
-				  (legal ?occDecision))
-	(legal (successor Evaluation ?occDecision))))
+	(implies
+		(occurrence-of ?occDecision Decision)
+		(exists (?occElabPA ?occEvalPA ?occSelectPA ?occAppliPA)
+				(and (occurrence-of ?occElabPA ElaborationPlanAction)
+					(occurrence-of ?occEvalPA EvaluationPlanAction)
+					(occurrence-of ?occSelectPA SelectionPlanAction)
+					(occurrence-of ?occAppliPA ApplicationPlanAction)
+					(subactivity-occurrence ?occElabPA ?occDecision)
+					(subactivity-occurrence ?occEvalPA ?occDecision)
+					(subactivity-occurrence ?occSelectPA ?occDecision)
+					(subactivity-occurrence ?occAppliPA ?occDecision)
+					(subactivity-precedes ?occElabPA ?occEvalPA ?occDecision)
+					(subactivity-precedes ?occEvalPA ?occSelectPA ?occDecision)
+					(subactivity-precedes ?occSelectPA ?occAppliPA ?occDecision)				
+				)
+		)
+	)
+)
 
-;;  --- 
+;; Ordonnancement des activités de l'évaluation : DefinitionStrategieEvaluation et ApplicationEvaluation
 
-;; La Detection est suivie d'une Collecte de données
-(forall (?occDetect)
-	(implies (and (occurrence_of ?occDetect Detection)
-				  (legal ?occDetect))
-	(legal (successor Collecte ?occDetect))))
+(forall (?occEval)
+	(implies
+		(occurrence-of ?occEval Evaluation)
+		(exists (?occDefStratEval ?occAppliEval)
+				(and (occurrence-of ?occDefStratEval DefinitionStrategieEvaluation)
+					(occurrence-of ?occAppliEval ApplicationEvaluation)
+					(subactivity-occurrence ?occDefStratEval ?occEval)
+					(subactivity-occurrence ?occAppliEval ?occEval)
+					(subactivity-precedes ?occDefStratEval ?occAppliEval ?occEval)
+				)
+		)
+	)
+)
 
 
 ;; La Collecte de données est suivie de l'Analyse 	

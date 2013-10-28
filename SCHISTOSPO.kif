@@ -10,7 +10,7 @@
 ;; Processus
 --
 (activity  Propagationschistosomiase)
-(activity_specialization  PropagationSchistosomiase Propagation)
+(activity-specialization  PropagationSchistosomiase Propagation)
 
 (activity ReproductionHumain)
 (activity CycleDeVieHumain)
@@ -122,7 +122,7 @@
 
 ;; La contamination est suivie de l'infection. L'infection ici correspond aussi au processus de la réaction pathologique.
 (forall (?occContam)
-	(implies (and (occurrence_of ?occContam Contamination)
+	(implies (and (occurrence-of ?occContam Contamination)
 				  (legal ?occContam))
 	(legal (successor Infection ?occContam))))
 
@@ -132,57 +132,57 @@
 ;; En fait, l'idée pourrait être de mettre un peu de probalité dans les préconditions 
 	
 (forall (?occContam)
-	(implies (and (occurrence_of ?occContam Contamination)
+	(implies (and (occurrence-of ?occContam Contamination)
 				  (legal ?occContam))
 	(legal (successor DeveloppementCercaire ?occContam))))
 	
 (forall (?occDevCercaire)
-	(implies (and (occurrence_of ?occDevCercaire DeveloppementCercaire)
+	(implies (and (occurrence-of ?occDevCercaire DeveloppementCercaire)
 				  (legal ?occDevCercaire))
 	(legal (successor DeveloppementSchistosomule ?occDevCercaire))))
 	
 (forall (?occDevSchisto)
-	(implies (and (occurrence_of ?occDevSchisto DeveloppementSchistosomule)
+	(implies (and (occurrence-of ?occDevSchisto DeveloppementSchistosomule)
 				  (legal ?occDevSchisto))
 	(legal (successor Reproduction ?occDevSchisto))))
 
 (forall (?occReprod)
-	(implies (and (occurrence_of ?occReprod Reproduction)
+	(implies (and (occurrence-of ?occReprod Reproduction)
 				  (legal ?occReprod))
 	(legal (successor LiberationOeuf ?occReprod))))
 	
 (forall (?occLibOeuf)
-	(implies (and (occurrence_of ?occLibOeuf LiberationOeuf)
+	(implies (and (occurrence-of ?occLibOeuf LiberationOeuf)
 				  (legal ?occLibOeuf))
 	(legal (successor Eclosion ?occLibOeuf))))
 	
 (forall (?occEclosion)
-	(implies (and (occurrence_of ?occEclosion Eclosion)
+	(implies (and (occurrence-of ?occEclosion Eclosion)
 				  (legal ?occEclosion))
 	(legal (successor PenetrationMollusque ?occEclosion))))
 	
 (forall (?occPenetMol)
-	(implies (and (occurrence_of ?occPenetMol PenetrationMollusque)
+	(implies (and (occurrence-of ?occPenetMol PenetrationMollusque)
 				  (legal ?occPenetMol))
 	(legal (successor Multiplication ?occPenetMol))))
 	
 (forall (?occMulti)
-	(implies (and (occurrence_of ?occMulti Multiplication)
+	(implies (and (occurrence-of ?occMulti Multiplication)
 				  (legal ?occMulti)))
 	(legal (successor LiberationSporocyste ?occMulti)))
 
 (forall (?occLibSporo)
-	(implies (and (occurrence_of ?occLibSporo LiberationSporocyste)
+	(implies (and (occurrence-of ?occLibSporo LiberationSporocyste)
 				  (legal ?occLibSporo))
 	(legal (successor DeveloppementSporocyste ?occLibSporo))))
 
 (forall (?occDevelop)
-	(implies (and (occurrence_of ?occDevelop DeveloppementSporocyste)
+	(implies (and (occurrence-of ?occDevelop DeveloppementSporocyste)
 				  (legal ?occDevelop))
 	(legal (successor RechercheHomme ?occDevelop))))
 	
 (forall (?occRechercheH)
-	(implies (and (occurrence_of ?occRechercheH RechercheHomme)
+	(implies (and (occurrence-of ?occRechercheH RechercheHomme)
 				  (legal ?occRechercheH))
 	(legal (successor Contamination ?occRechercheH))))
 	

@@ -12,7 +12,7 @@
 ;; Processus
 
 (activity  VeilleSchistosomiase)
-(activity_specialization  VeilleSchistosomiase VeilleEpidemiologique)
+(activity-specialization  VeilleSchistosomiase VeilleEpidemiologique)
 
 (activity  Propagationschistosomiase)
 

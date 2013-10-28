@@ -28,58 +28,58 @@
 ;; (SUCCESSEUR ?Suiv ?Preced) est une fonction qui renvoie VRAI si ?Suive est l'occurrence qui suit l'occurrence ?Preced.
 
 (forall (?occPreced)
-	(implies (and (occurrence_of ?occPreced Precedent)
+	(implies (and (occurrence-of ?occPreced Precedent)
 				  (legal ?occDetect))
 	(legal (successor Suivant ?occPreced))))
 
 
-;;   NEXT_SUBOCC
-;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Il n'autorise l'occurrence d'aucune autre activité entre deux activités qu'elle relie dans une activité complexe. NEXT_SUBOCC permet d'exprimer plus de contrainte dans la spécialisation ou la réutilisation d'un patron.
+;;   NEXT-ACTIVITY
+;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Il n'autorise l'occurrence d'aucune autre activité entre deux activités qu'elle relie dans une activité complexe. NEXT-ACTIVITY permet d'exprimer plus de contrainte dans la spécialisation ou la réutilisation d'un patron.
 
 (forall (?occSuivPreced)
 	(implies
-		(occurrence_of ?occSuivPreced SuivPreced)
+		(occurrence-of ?occSuivPreced SuivPreced)
 		(exists (?occPreced ?occSuiv)
-				(and (occurrence_of ?occPreced Paint)
-				(occurrence_of ?occSuiv Dry)
-				(subactivity_occurrence ?occPreced ?occSuivPreced)
-				(subactivity_occurrence ?occSuiv ?occSuivPreced)
-				(next_subocc ?occPreced ?occSuiv SuivPreced)))))
+				(and (occurrence-of ?occPreced Paint)
+				(occurrence-of ?occSuiv Dry)
+				(subactivity-occurrence ?occPreced ?occSuivPreced)
+				(subactivity-occurrence ?occSuiv ?occSuivPreced)
+				(next-activity ?occPreced ?occSuiv SuivPreced)))))
 
-;;   MIN_PRECEDES
-;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Contrairement à NEXT_SUBOCC, il autorise l'occurrence d'une autre activité entre deux activités qu'elle relie dans une activité complexe. MIN_PRECEDES laisse plus de possibilité à une redéfinition des activités dans le cadre d'une spécialisation ou d'une réutilisation d'un patron.
+;;   SUBACTIVITY-PRECEDES
+;;   La relation est utilisée pour l'ordonnancement des sous-activités d'une activité complexe. Contrairement à NEXT-ACTIVITY, il autorise l'occurrence d'une autre activité entre deux activités qu'elle relie dans une activité complexe. SUBACTIVITY-PRECEDES laisse plus de possibilité à une redéfinition des activités dans le cadre d'une spécialisation ou d'une réutilisation d'un patron.
 
 (forall (?occSuivPreced)
 	(implies
-		(occurrence_of ?occSuivPreced SuivPreced)
+		(occurrence-of ?occSuivPreced SuivPreced)
 		(exists (?occPreced ?occSuiv)
-				(and (occurrence_of ?occPreced Paint)
-				(occurrence_of ?occSuiv Dry)
-				(subactivity_occurrence ?occPreced ?occSuivPreced)
-				(subactivity_occurrence ?occSuiv ?occSuivPreced)
-				(min_precedes ?occPreced ?occSuiv SuivPreced)))))
+				(and (occurrence-of ?occPreced Paint)
+				(occurrence-of ?occSuiv Dry)
+				(subactivity-occurrence ?occPreced ?occSuivPreced)
+				(subactivity-occurrence ?occSuiv ?occSuivPreced)
+				(subactivity-precedes ?occPreced ?occSuiv SuivPreced)))))
 
-;; ROOT_OCC et LEAF_OCC permettent respectivement de spécifier les activités de début et de fin d'une activité complexe.
+;; ROOT-OCC et LEAF-OCC permettent respectivement de spécifier les activités de début et de fin d'une activité complexe.
 
-;; Les realations NEXT_SUBBOCC, MIN_PRECEDES, ROOT_OCC et LEAF_OCC s'appliquent aux occurrences d'activité d'une activité complexe. Leurs utilisations	supposent que les activités mises en relation sont primitive. Il existe une alternative si on ne veut pas spécifier la nature (primitive ou complexe) de la sous-activité : 
+;; Les realations NEXT-ACTIVITY, SUBACTIVITY-PRECEDES, ROOT-OCC et LEAF-OCC s'appliquent aux occurrences d'activité d'une activité complexe. Leurs utilisations	supposent que les activités mises en relation sont primitive. Il existe une alternative si on ne veut pas spécifier la nature (primitive ou complexe) de la sous-activité : 
 
 (forall (?occSuivPreced)
 	(implies
-	(occurrence_of ?occSuivPreced SuivPreced)
+	(occurrence-of ?occSuivPreced SuivPreced)
 	(exists (?occPreced ?occSuiv
 			?rootPreced ?leafPreced
 			?rootSuiv ?leafSuiv)
-			(and (occurrence_of ?occPreced Paint)
-				(occurrence_of ?occSuiv Dry)
-				(subactivity_occurrence ?occPreced ?occSuivPreced)
-				(subactivity_occurrence ?occSuiv ?occSuivPreced)
-				(root_occ ?rootPreced ?occPreced)
-				(leaf_occ ?leafPreced ?occPreced)
-				(root_occ ?rootSuiv ?occSuiv)
-				(leaf_occ ?leafSuiv ?occSuiv)
-				(root_occ ?rootPreced ?occSuivPreced)
-				(next_subocc ?leafPreced ?rootSuiv SuivPreced)
-				(leaf_occ ?leafSuiv ?occSuivPreced)))))
+			(and (occurrence-of ?occPreced Paint)
+				(occurrence-of ?occSuiv Dry)
+				(subactivity-occurrence ?occPreced ?occSuivPreced)
+				(subactivity-occurrence ?occSuiv ?occSuivPreced)
+				(root-occ ?rootPreced ?occPreced)
+				(leaf-occ ?leafPreced ?occPreced)
+				(root-occ ?rootSuiv ?occSuiv)
+				(leaf-occ ?leafSuiv ?occSuiv)
+				(root-occ ?rootPreced ?occSuivPreced)
+				(next-activity ?leafPreced ?rootSuiv SuivPreced)
+				(leaf-occ ?leafSuiv ?occSuivPreced)))))
 				
 ;; Cette alternative pourrait être utilisée pour Traitement (Analyse) et Contamination par exemple dans les patrons
 				
@@ -92,18 +92,18 @@
 ;;   HOLDS
 
 (forall (?occCont)
-	(implies	(occurrence_of ?occContam Contamination)
+	(implies	(occurrence-of ?occContam Contamination)
 				(and (prior Sain ?occContam)
 					 (holds Infecte ?occContam))))
 
 ;; Prédiction ... 
 					 
 (forall (?occContam)
-	(implies	(and (occurrence_of ?occContam Contamination)
+	(implies	(and (occurrence-of ?occContam Contamination)
 					 (prior Sain ?occContam)
 					 (holds Infecte ?occContam))
 				(exists (?occInfect) 
-						(and (occurrence_of ?occInfect Infection)
+						(and (occurrence-of ?occInfect Infection)
 							 (= (endof(?occContam) beginof(?occInfect)))
 						)
 				)
@@ -113,12 +113,12 @@
 ;; Explication ... 
 
 (forall (?occInfect)
-	(implies (and (occurrence_of ?occInfect Infection)
-				  (subactivity_occurrence ?occInfect ?occPropag)
+	(implies (and (occurrence-of ?occInfect Infection)
+				  (subactivity-occurrence ?occInfect ?occPropag)
 			 )
 			 (exists (?occContam) 
-					 (and (occurrence_of ?occContam Contamination)
-						  (subactivity_occurrence ?occContam ?occPropag)
+					 (and (occurrence-of ?occContam Contamination)
+						  (subactivity-occurrence ?occContam ?occPropag)
 						  (prior Sain ?occContam)
 						  (holds Infecte ?occContam)
 						  (ealier ?occContam ?occInfect))
@@ -127,9 +127,9 @@
 )
 
 (forall (?occSurveil)
-	(implies (and (occurrence_of ?occSurveil Surveillance)
-				  (subactivity_occurrence ?occSurveil ?occVeilleEpi))
+	(implies (and (occurrence-of ?occSurveil Surveillance)
+				  (subactivity-occurrence ?occSurveil ?occVeilleEpi))
 			 (exists (?occAnalyse)
-					 (and (occurrence_of ?occAnalyse Analyse)
-						  (subactivity_occurrence ?occAnalyse ?occVeilleEpi)
+					 (and (occurrence-of ?occAnalyse Analyse)
+						  (subactivity-occurrence ?occAnalyse ?occVeilleEpi)
 						  (ealier ?occSurveil ?occAnalyse)))))	
