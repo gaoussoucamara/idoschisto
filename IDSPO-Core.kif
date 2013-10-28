@@ -69,6 +69,53 @@
 
 ;; ORDONNANCEMENT DES ACTIVITÉS
 
+;; Exemples
+
+;; La Contamination fait passer un individu de l'état Susceptible à l'état Infecte
+
+(forall (?occContam)
+	(implies	(occurrence-of ?occContam Contamination)
+				(and (prior Susceptible ?occContam)
+					 (holds Infecte ?occContam))))
+
+;; Le Retablissement fait passer un individu de l'état Infecte à l'état Retabli
+					 
+(forall (?occRetab)
+	(implies	(occurrence-of ?occRetab Retablissement)
+				(and (prior Infecte ?occRetab)
+					 (holds Retabli ?occRetab))))
+
+;; Le début de l'Infection correspond à la fin de l'événement de Contamination
+					 
+(forall (?occContam)
+	(implies	(and (occurrence-of ?occContam Contamination)
+					 (prior Susceptible ?occContam)
+					 (holds Infecte ?occContam))
+				(exists (?occInfect) 
+						(and (occurrence-of ?occInfect Infection)
+							 (= (endof(?occContam) beginof(?occInfect)))
+						)
+				)
+	)
+)
+
+;; Pour toute occurrence d'infection, elle est précédée par une occurrence de contamination qui a fait passé l'individu de l'état susceptible à l'état infecté suivant le modèle SIR. 
+
+(forall (?occInfect ?occPropag)
+	(implies (and (occurrence-of ?occInfect Infection)
+				  (occurrence-of ?occPropag Propagation)
+				  (subactivity-occurrence ?occInfect ?occPropag)
+			 )
+			 (exists (?occContam) 
+					 (and (occurrence-of ?occContam Contamination)
+						  (subactivity-occurrence ?occContam ?occPropag)
+						  (prior Susceptible ?occContam)
+						  (holds Infecte ?occContam)
+						  (ealier ?occContam ?occInfect))
+			 )
+	)
+)
+
 ;; L'Infection et la Thérapie peuvent se produire en même temps
 
 ;; L'Infection et le Rétablissement peuvent se produire en même temps

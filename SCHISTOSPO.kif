@@ -128,8 +128,10 @@
 
 ;; La contamination implique une pénétration de l'homme par le parasite	
 	
-;; la succession entre les autres phases n'est pas systématique et dépend d'une certaine probailité même si toutes les préconditions sont réunies
-;; En fait, l'idée pourrait être de mettre un peu de probalité dans les préconditions 
+;; la succession entre les autres phases n'est pas systématique et dépend d'une certaine probabilité même si toutes les préconditions sont réunies
+;; En fait, l'idée pourrait être de mettre un peu de probabilité dans les préconditions 
+
+;; Cylce de vie du schistosome, parasite de la schistosomiase
 	
 (forall (?occContam)
 	(implies (and (occurrence-of ?occContam Contamination)
