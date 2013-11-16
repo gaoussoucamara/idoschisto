@@ -507,6 +507,15 @@
         <ObjectProperty IRI="http://www.semanticweb.org/ontologies/2013/5/idmdo#produces"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#has_formalism"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has_objective_function"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has_simulator"/>
+    </Declaration>
+    <Declaration>
         <DataProperty IRI="http://purl.obolibrary.org/obo/IAO_0000004"/>
     </Declaration>
     <Declaration>
@@ -8364,6 +8373,51 @@
         <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#CN_sg"/>
         <IRI>http://www.semanticweb.org/ontologies/2013/5/idmdo#viewpoint</IRI>
         <Literal datatypeIRI="&rdf;PlainLiteral">viewpoint</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_pl"/>
+        <IRI>#has_formalism</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_formalism</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_sg"/>
+        <IRI>#has_formalism</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_formalisms</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_vbg"/>
+        <IRI>#has_formalism</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_formalismed</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_pl"/>
+        <IRI>#has_objective_function</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_objective_function</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_sg"/>
+        <IRI>#has_objective_function</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_objective_functions</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_vbg"/>
+        <IRI>#has_objective_function</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_objective_functioned</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_pl"/>
+        <IRI>#has_simulator</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_simulator</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_sg"/>
+        <IRI>#has_simulator</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_simulators</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="http://attempto.ifi.uzh.ch/ace_lexicon#TV_vbg"/>
+        <IRI>#has_simulator</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">has_simulatored</Literal>
     </AnnotationAssertion>
     <AnnotationAssertion>
         <AnnotationProperty IRI="http://www.geneontology.org/formats/oboInOwl#hasDbXref"/>
